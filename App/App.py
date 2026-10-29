@@ -149,7 +149,7 @@ class SQLiteConnectionWrapper:
 
 # sql connector
 try:
-    connection = pymysql.connect(host='localhost', user='root', password='root@MySQL4admin', db='cv')
+    connection = pymysql.connect(host='localhost', user='root', password='root@MySQL4admin', db='cv', connect_timeout=1)
     cursor = connection.cursor()
 except Exception:
     db_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cv.db')
@@ -180,11 +180,20 @@ def insertf_data(feed_name,feed_email,feed_score,comments,Timestamp):
 ###### Setting Page Configuration (favicon, Logo, Title) ######
 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+_current_dir = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists(os.path.join(_current_dir, 'Logo')):
+    BASE_DIR = _current_dir
+elif os.path.exists(os.path.join(_current_dir, 'App', 'Logo')):
+    BASE_DIR = os.path.join(_current_dir, 'App')
+else:
+    BASE_DIR = _current_dir
+
+page_icon_path = os.path.join(BASE_DIR, 'Logo', 'recommend.png')
+page_icon = Image.open(page_icon_path) if os.path.exists(page_icon_path) else "📄"
 
 st.set_page_config(
    page_title="AI Resume Analyzer",
-   page_icon=os.path.join(BASE_DIR, 'Logo', 'recommend.png'),
+   page_icon=page_icon,
 )
 
 
@@ -210,7 +219,7 @@ def run():
 
         <noscript>
             <a href="https://www.freecounterstat.com" title="hit counter">
-                <img src="https://counter9.stat.ovh/private/freecounterstat.php?c=t2xghr8ak6lfqt3kgru233378jya38dy" border="0" title="hit counter" alt="hit counter"> -->
+                <img src="https://counter9.stat.ovh/private/freecounterstat.php?c=t2xghr8ak6lfqt3kgru233378jya38dy" border="0" title="hit counter" alt="hit counter">
             </a>
         </noscript>
     
@@ -290,10 +299,10 @@ def run():
             dev_user = os.environ.get('USERNAME', 'User')
         os_name_ver = platform.system() + " " + platform.release()
         try:
-            g = geocoder.ip('me')
+            g = geocoder.ip('me', timeout=2)
             latlong = g.latlng if g else None
             if latlong:
-                geolocator = Nominatim(user_agent="http")
+                geolocator = Nominatim(user_agent="ai_resume_analyzer", timeout=2)
                 location = geolocator.reverse(latlong, language='en')
                 address = location.raw.get('address', {}) if location else {}
                 city = address.get('city', '')

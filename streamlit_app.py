@@ -12,12 +12,17 @@ if app_dir not in sys.path:
 
 import nltk
 
-# Ensure all essential NLTK resources are downloaded before importing App
+# Ensure all essential NLTK resources are downloaded before running App
 for res in ['stopwords', 'punkt', 'punkt_tab', 'averaged_perceptron_tagger', 'averaged_perceptron_tagger_eng', 'wordnet', 'omw-1.4']:
     try:
         nltk.download(res, quiet=True)
     except Exception:
         pass
 
-# Import and execute App
-import App
+app_file = os.path.join(app_dir, 'App.py')
+os.chdir(app_dir)
+
+# Execute App.py within the active Streamlit script context on every run
+with open(app_file, 'r', encoding='utf-8') as f:
+    code = compile(f.read(), app_file, 'exec')
+    exec(code, globals())
