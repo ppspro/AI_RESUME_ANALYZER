@@ -482,10 +482,16 @@ def extract_experience(resume_text):
     :return: list of experience
     '''
     wordnet_lemmatizer = WordNetLemmatizer()
-    stop_words = set(stopwords.words('english'))
+    try:
+        stop_words = set(stopwords.words('english'))
+    except Exception:
+        stop_words = cs.STOPWORDS
 
     # word tokenization
-    word_tokens = nltk.word_tokenize(resume_text)
+    try:
+        word_tokens = nltk.word_tokenize(resume_text)
+    except Exception:
+        word_tokens = resume_text.split()
 
     # remove stop words and lemmatize
     filtered_sentence = [
@@ -493,7 +499,10 @@ def extract_experience(resume_text):
             in stop_words and wordnet_lemmatizer.lemmatize(w)
             not in stop_words
         ]
-    sent = nltk.pos_tag(filtered_sentence)
+    try:
+        sent = nltk.pos_tag(filtered_sentence)
+    except Exception:
+        sent = [(w, 'NNP') for w in filtered_sentence]
 
     # parse regex
     cp = nltk.RegexpParser('P: {<NNP>+}')

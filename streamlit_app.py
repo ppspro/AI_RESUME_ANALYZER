@@ -10,5 +10,14 @@ if root_dir not in sys.path:
 if app_dir not in sys.path:
     sys.path.insert(0, app_dir)
 
+import nltk
+
+# Ensure all essential NLTK resources are downloaded before importing App
+for res in ['stopwords', 'punkt', 'punkt_tab', 'averaged_perceptron_tagger', 'averaged_perceptron_tagger_eng', 'wordnet', 'omw-1.4']:
+    try:
+        nltk.download(res, quiet=True)
+    except Exception:
+        pass
+
 # Import and execute App
 import App

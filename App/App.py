@@ -2,6 +2,13 @@
 
 
 ###### Packages Used ######
+import nltk
+for res in ['stopwords', 'punkt', 'punkt_tab', 'averaged_perceptron_tagger', 'averaged_perceptron_tagger_eng', 'wordnet', 'omw-1.4']:
+    try:
+        nltk.download(res, quiet=True)
+    except Exception:
+        pass
+
 import streamlit as st # core package used in this project
 import pandas as pd
 import base64, random
@@ -34,12 +41,6 @@ from streamlit_tags import st_tags
 from PIL import Image
 # pre stored data for prediction purposes
 from Courses import ds_course,web_course,android_course,ios_course,uiux_course,resume_videos,interview_videos
-import nltk
-for res in ['stopwords', 'punkt', 'punkt_tab', 'averaged_perceptron_tagger', 'averaged_perceptron_tagger_eng', 'wordnet', 'omw-1.4']:
-    try:
-        nltk.download(res, quiet=True)
-    except Exception:
-        pass
 
 
 ###### Preprocessing functions ######
