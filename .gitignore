@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+venv/
+venvapp/
+env/
+ENV/
+*.db
+.vscode/
+.idea/
+.streamlit/secrets.toml
+App/Uploaded_Resumes/*
+!App/Uploaded_Resumes/.gitkeep
