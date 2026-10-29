@@ -1,34 +1,3 @@
-<p><small>Best View in <a href="https://github.com/settings/appearance">Light Mode</a> and Desktop Site (Recommended)</small></p><br/>
-
-![AI-Resume-Analyzer](./screenshots/RESUME.png)
-
-<div align="center">
-  <h1>🌴 AI RESUME ANALYZER 🌴</h1>
-  <p>A Tool for Resume Analysis, Predictions and Recommendations</p>
-  <!-- Badges -->
-  <p>
-    <img src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103" alt="open source" />
-    <a href="LICENSE">
-      <img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="license" />
-    </a>
-  </p>
-  
-  <!--links-->
-  <h4>
-    <a href="#preview-">View Demo</a>
-    <span> · </span>
-    <a href="#setup--installation-">Installation</a>
-  </h4>
-  <p>
-    <small align="justify">
-      Built with 🤍 through 
-      <a href="https://www.linkedin.com/in/mrbriit/">Dr Bright --(Data Scientist)</a>
-     </small>
-  </p>
-  <small align="justify">🚀 A Project Submitted for the partial fulfilment of the degree B.sc CS at 
-    <a href="https://kirticollege.edu.in/">Kirti College</a> during academic year 2022-23
-  </small>
-</div><br/><br/>
 
 ## About the Project 🥱
 <div align="center">
