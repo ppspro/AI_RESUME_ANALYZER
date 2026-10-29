@@ -13,3 +13,4 @@ ENV/
 .streamlit/secrets.toml
 App/Uploaded_Resumes/*
 !App/Uploaded_Resumes/.gitkeep
+

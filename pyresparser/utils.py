@@ -5,18 +5,35 @@ import os
 import re
 import nltk
 import pandas as pd
-import docx2txt
+try:
+    import docx2txt
+except ImportError:
+    docx2txt = None
 from datetime import datetime
 from dateutil import relativedelta
 from . import constants as cs
-from pdfminer.converter import TextConverter
-from pdfminer.pdfinterp import PDFPageInterpreter
-from pdfminer.pdfinterp import PDFResourceManager
-from pdfminer.layout import LAParams
-from pdfminer.pdfpage import PDFPage
-from pdfminer.pdfparser import PDFSyntaxError
+try:
+    from pdfminer.converter import TextConverter
+    from pdfminer.pdfinterp import PDFPageInterpreter
+    from pdfminer.pdfinterp import PDFResourceManager
+    from pdfminer.layout import LAParams
+    from pdfminer.pdfpage import PDFPage
+    from pdfminer.pdfparser import PDFSyntaxError
+except ImportError:
+    from pdfminer3.converter import TextConverter
+    from pdfminer3.pdfinterp import PDFPageInterpreter
+    from pdfminer3.pdfinterp import PDFResourceManager
+    from pdfminer3.layout import LAParams
+    from pdfminer3.pdfpage import PDFPage
+    from pdfminer3.pdfparser import PDFSyntaxError
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+
+for _res in ['stopwords', 'punkt', 'punkt_tab', 'averaged_perceptron_tagger', 'averaged_perceptron_tagger_eng', 'wordnet', 'omw-1.4']:
+    try:
+        nltk.download(_res, quiet=True)
+    except Exception:
+        pass
 
 
 def extract_text_from_pdf(pdf_path):
@@ -128,10 +145,12 @@ def extract_text_from_docx(doc_path):
     :return: string of extracted text
     '''
     try:
+        if docx2txt is None:
+            return ' '
         temp = docx2txt.process(doc_path)
         text = [line.replace('\t', ' ') for line in temp.split('\n') if line]
         return ' '.join(text)
-    except KeyError:
+    except Exception:
         return ' '
 
 

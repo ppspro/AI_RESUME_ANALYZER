@@ -18,17 +18,28 @@ import plotly.graph_objects as go
 from geopy.geocoders import Nominatim
 # libraries used to parse the pdf files
 from pyresparser import ResumeParser
-from pdfminer3.layout import LAParams, LTTextBox
-from pdfminer3.pdfpage import PDFPage
-from pdfminer3.pdfinterp import PDFResourceManager
-from pdfminer3.pdfinterp import PDFPageInterpreter
-from pdfminer3.converter import TextConverter
+try:
+    from pdfminer3.layout import LAParams, LTTextBox
+    from pdfminer3.pdfpage import PDFPage
+    from pdfminer3.pdfinterp import PDFResourceManager
+    from pdfminer3.pdfinterp import PDFPageInterpreter
+    from pdfminer3.converter import TextConverter
+except ImportError:
+    from pdfminer.layout import LAParams, LTTextBox
+    from pdfminer.pdfpage import PDFPage
+    from pdfminer.pdfinterp import PDFResourceManager
+    from pdfminer.pdfinterp import PDFPageInterpreter
+    from pdfminer.converter import TextConverter
 from streamlit_tags import st_tags
 from PIL import Image
 # pre stored data for prediction purposes
 from Courses import ds_course,web_course,android_course,ios_course,uiux_course,resume_videos,interview_videos
 import nltk
-nltk.download('stopwords')
+for res in ['stopwords', 'punkt', 'punkt_tab', 'averaged_perceptron_tagger', 'averaged_perceptron_tagger_eng', 'wordnet', 'omw-1.4']:
+    try:
+        nltk.download(res, quiet=True)
+    except Exception:
+        pass
 
 
 ###### Preprocessing functions ######
