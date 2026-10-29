@@ -77,13 +77,90 @@ def pdf_reader(file):
 
 # show uploaded file path to view pdf_display
 def show_pdf(file_path):
+    import streamlit.components.v1 as components
     with open(file_path, "rb") as f:
-        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-    pdf_display = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
-    st.markdown(pdf_display, unsafe_allow_html=True)
+        pdf_bytes = f.read()
+    base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
+
+    pdf_html = f"""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        body {{
+            margin: 0;
+            background-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }}
+        #pdf-container {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1e1e24;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }}
+        canvas {{
+            margin-bottom: 15px;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border-radius: 4px;
+        }}
+        #loading {{
+            color: #e0e0e0;
+            font-size: 14px;
+            padding: 20px;
+            text-align: center;
+        }}
+    </style>
+</head>
+<body>
+    <div id="pdf-container">
+        <div id="loading">📄 Rendering resume preview...</div>
+    </div>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const b64 = "{base64_pdf}";
+        const bin = window.atob(b64);
+        const len = bin.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {{
+            bytes[i] = bin.charCodeAt(i);
+        }}
+        pdfjsLib.getDocument({{data: bytes}}).promise.then(function(pdf) {{
+            document.getElementById('loading').style.display = 'none';
+            const container = document.getElementById('pdf-container');
+            for (let num = 1; num <= pdf.numPages; num++) {{
+                pdf.getPage(num).then(function(page) {{
+                    const scale = 1.3;
+                    const viewport = page.getViewport({{scale: scale}});
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    container.appendChild(canvas);
+                    page.render({{canvasContext: ctx, viewport: viewport}});
+                }});
+            }}
+        }}).catch(function(err) {{
+            document.getElementById('loading').innerHTML = '⚠️ Note: PDF preview could not be rendered in this browser. Please use the download button below.';
+        }});
+    </script>
+</body>
+</html>"""
+    st.subheader("📄 **Resume Preview**")
+    components.html(pdf_html, height=700, scrolling=True)
+    st.download_button(
+        label="📥 Download / Open Resume PDF",
+        data=pdf_bytes,
+        file_name=os.path.basename(file_path),
+        mime="application/pdf"
+    )
 
 
-# course recommendations which has data already loaded from Courses.py
 def course_recommender(course_list):
     st.subheader("**Courses & Certificates Recommendations 👨‍🎓**")
     c = 0
