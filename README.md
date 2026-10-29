@@ -117,7 +117,7 @@ To run this project, perform the following tasks 😨
 
 Download the code file manually or via git
 ```bash
-git clone https://github.com/AI-Resume-Analyzer.git
+git clone https://github.com/ppspro/AI_RESUME_ANALYZER.git
 ```
 
 Create a virtual environment and activate it **(recommended)**
